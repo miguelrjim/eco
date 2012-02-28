@@ -1,7 +1,11 @@
 <?php
 session_start();
-$_SESSION['comunidad'] = 1;
-$_SESSION['comunidadn'] = 'Global';
+if(!isset($_GET['q']))
+{
+	header('Location: index.php');
+	die('');
+}
+include 'condb.php';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -24,38 +28,33 @@ $(document).ready(function(e) {
 <div class="principal">
 <div class="header">
 <div class="logo"></div>
-<div class="esq-sup-der"><?php if(isset($_SESSION['id'])) {?>><a href="logout.php">Logout</a><br /><img class="foto" src="usuarios/<?=$_SESSION['id']?>" /><br /><?=$_SESSION['nombre']?><?php } else { ?><a href="registro.php">Registrarte</a> | <a href="login.php">Iniciar sesion</a><?php } ?></div>
+<div class="esq-sup-der"><?php if(isset($_SESSION['id'])) {?><a href="logout.php">Logout</a><br /><img class="foto" src="usuarios/<?=$_SESSION['id']?>" /><br /><?=$_SESSION['nombre']?><?php } else { ?><a href="registro.php">Registrarte</a> | <a href="login.php">Iniciar sesion</a><?php } ?></div>
 <div class="esq-inf-der"><form action="busqueda.php" method="get"><input type="text" id="buscar" name="q" placeholder="Buscar..." /><span class="lupa"></span></form></div>
 </div>
 <ul class="navegacion">
 <li><a href="index.php">Home</a></li><li><a href="comunidadesv.php">Comunidades</a></li><li><a href="comunidadd.php">Comunidad</a></li><?php if(isset($_SESSION['id'])) { ?><li>Mi Perfil</li><li><a href="agregar.php">Subir Noticia</a></li><?php } ?>
 </ul>
 <div class="contenido">
-<ul class="pestanas">
-<li class="selected">Noticias destacadas</li>
-</ul>
+<h1 style="text-align:center;">Resultados de la busqueda</h1>
 <div class="noticias">
 <?php
-include 'condb.php';
-include 'ranking.php';
-$principales = RankeaNoticiasPerra();
-$stmt = $db->prepare('SELECT a.*,LENGTH(a.abstracto) AS tamano,SUBSTRING(a.abstracto,1,140) AS abstracto,DATE_FORMAT(a.fecha,"%e/%m/%Y") AS fechac,b.nombre,b.apellido,b.id AS autor FROM noticias AS a INNER JOIN usuarios AS b ON a.id_usuario=b.id  WHERE a.id=? AND a.id_comunidad IS NOT NULL ORDER BY a.id DESC');
-$stmt->bind_param('i', $noticia);
 $todos = array();
-foreach($principales as $noticia=>$valor)
+$result = $db->query("SELECT a.*,LENGTH(a.abstracto) AS tamano,SUBSTRING(a.abstracto,1,140) AS abstracto,b.nombre,b.apellido,b.id,c.nombre AS autor FROM noticias AS a INNER JOIN usuarios AS b ON a.id_usuario=b.id INNER JOIN comunidades AS c ON c.id=a.id_comunidad WHERE a.id_comunidad IS NOT NULL AND c.nombre RLIKE '{$_GET['q']}' ORDER BY a.id DESC");
+$ids = array();
+while($fila=$result->fetch_assoc())
 {
-	$stmt->execute();
-	$result = $stmt->get_result();
-	if($result->num_rows == 0)
-	{
-		$result->free;
-		continue;
-	}
-	$fila=$result->fetch_assoc();
 	$todos[] = $fila;
-	$result->free();
+	$ids[] = $fila['id'];
 }
-$stmt->close();
+$result = $db->query("SELECT a.*,LENGTH(a.abstracto) AS tamano,SUBSTRING(a.abstracto,1,140) AS abstracto,b.nombre,b.apellido,b.id,c.nombre AS autor FROM noticias AS a INNER JOIN usuarios AS b ON a.id_usuario=b.id INNER JOIN comunidades AS c ON c.id=a.id_comunidad WHERE a.id_comunidad IS NOT NULL AND a.id NOT IN(" . implode(',',$ids) . ") AND (b.nombre RLIKE '{$_GET['q']}' OR b.apellido RLIKE '{$_GET['q']}') ORDER BY a.id DESC");
+while($fila=$result->fetch_assoc())
+{
+	$todos[] = $fila;
+	$ids[] = $fila['id'];
+}
+$result = $db->query("SELECT a.*,LENGTH(a.abstracto) AS tamano,SUBSTRING(a.abstracto,1,140) AS abstracto,b.nombre,b.apellido,b.id,c.nombre AS autor FROM noticias AS a INNER JOIN usuarios AS b ON a.id_usuario=b.id INNER JOIN comunidades AS c ON c.id=a.id_comunidad WHERE a.id_comunidad IS NOT NULL AND a.id NOT IN(" . implode(',',$ids) . ") AND (a.titulo RLIKE '{$_GET['q']}' OR a.abstracto RLIKE '{$_GET['q']}' OR a.descripcion RLIKE '{$_GET['q']}') ORDER BY a.id DESC");
+while($fila=$result->fetch_assoc())
+	$todos[] = $fila;
 ?>
 <div class="previews">
 <?php
@@ -78,7 +77,7 @@ foreach($todos as $fila)
 <div class="noticia" id="not<?=$fila['id']?>" style="background-size:100% 100%; background-image:url(<?=file_exists("noticias/{$fila['id']}") ? "noticias/{$fila['id']}" : "comunidades/{$fila['id_comunidad']}"?>)">
 <div style="position:absolute; bottom:0;">
 <div class="abstracto"><?=$fila['abstracto']?></div>
-<div class="autor">By <img src="usuarios/<?=$fila['autor']?>" /><?=$fila['nombre'] . ' ' . $fila['apellido']?> <?=$fila['fechac']?></div>
+<div class="autor">By <img src="usuarios/<?=$fila['autor']?>" /><?=$fila['nombre'] . ' ' . $fila['apellido']?></div>
 <div class="completo"><a href="noticiac.php?id=<?=$fila['id']?>">Ver mas</a></div>
 </div>
 </div>
@@ -88,10 +87,11 @@ foreach($todos as $fila)
 </div>
 </div>
 </div>
+<?php if(isset($_SESSION['id'])) { ?>
 <div class="comunidades">
-<p style="text-align:center;">Todas las comunidades</p>
+<p style="text-align:center;">Comunidades que sigues</p>
 <?php
-$result=$db->query("SELECT * FROM comunidades");
+$result=$db->query("SELECT a.* FROM comunidades AS a INNER JOIN usuarios_comunidades AS b ON b.id_comunidad=a.id AND b.id_usuario={$_SESSION['id']}");
 while($fila=$result->fetch_assoc())
 {
 ?>
@@ -105,6 +105,9 @@ while($fila=$result->fetch_assoc())
 }
 ?>
 </div>
+<?php
+}
+?>
 <div class="footer">
 <ul class="lista">
 <li><a href="index.php">Inicio</a></li> | <li><a href="quienes.php">Quienes somos</a></li> | <li><a href="mailto:ecopagsoporte@hotmail.com">Contacto</a></li> | <li><a href="terminos.php">Términos y condiciones</a></li>

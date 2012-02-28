@@ -1,0 +1,64 @@
+/* CSS Document */
+
+*{margin:0; padding:0;}
+a{color:inherit; margin:0 5px;}
+.principal{width:960px; margin:0 auto; padding:10px;}
+.header{width:auto; background:#0033FF; position:relative;}
+.esq-sup-der{display:inline-block; position:absolute; top:0; right:0; margin-right:10px; margin-top:10px; height:20px; color:#709CC2;}
+.esq-inf-der{position:absolute; right:0; bottom:0; margin-right:10px; margin-bottom:10px; height:20px;}
+#buscar{height:20px; border-radius:10px; padding-left:20px;}
+.lupa{position:absolute; left:4px; top:2px; height:16px; width:16px; background-image:url(images/lupa.png);}
+.logo{display:inline-block; height:120px; width:250px; background-color:#666; margin:5px; background-image:url(images/logo.jpg); background-size:100% 100%;}
+.navegacion{list-style-type:none; margin:10px 0; text-align:center;}
+.navegacion li{padding:10px 20px; background-color:#C2DE0A; box-shadow:5px 5px 0 0px #000; display:inline-block; margin:0 8px; cursor:pointer;}
+.contenido{margin-top:10px;}
+.pestanas{list-style:none;}
+.pestanas li{padding:5px 10px; display:inline-block; border-top-right-radius:15px; border:1px solid #000; border-bottom:none; margin-left:10px; cursor:pointer;}
+.pestanas li:first-child{margin-left:20px;}
+.pestanas li.selected{position:relative; bottom:-1px; background:#FFF;}
+.noticias{border:1px solid #000; height:400px; margin-bottom:40px; overflow:auto; background-color:#EDF0F5;}
+.anoticias{border:1px solid #000; min-height:400px; margin:40px;}
+.pnoticias{border:1px solid #000; min-height:400px; margin:40px;}
+.n_noticia{margin-top: 20px; margin-bottom:20px; margin-left:60px;}
+.c_noticia{height:150px; width:400px; margin-left:60px}
+.b_noticia{font-family: "Times New Roman"; font-size:16pt; width:200px;}
+.p_noticia{font-family: "Times New Roman"; font-size:16pt; width:200px;}
+.p_noticiaf1{width:90%; margin:25px 5% 25px 5%;}
+.p_noticiaf2{width:100%; height:300px;}
+.p_noticiaf3{width:150px; height:40px;margin-bottom:15px;margin-top:15px;margin-left:15px}
+.noticias_botones{list-style-type:none; margin:10px 0; text-align:center;}
+.noticias_botones li,a.seguir{padding:10px 20px; background-color:#C2DE0A; box-shadow:5px 5px 0 0px #000; display:inline-block; width:120px;height:30px;list-style-type:none;margin-right:30px;margin-top:30px;}
+.previews{width:20%; float:right; height:100%; overflow:auto;}
+.preview{margin:10px 0; cursor:pointer;}
+.preview img{width:100%;}
+.noticias-cont{position:relative; width:80%; height:100%;}
+.noticia{position:absolute; top:0; left:0; height:100%; width:100%;}
+.preview .titulo{font:inherit;}
+.titulo{text-align:center; font:44px "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;}
+.foto{width:60px; max-height:60px;}
+.autor{background:rgba(255,255,255,0.7); margin:0px 5px 5px 5px;}
+.autor img{width:30px; max-height:40px;}
+.abstracto{background:rgba(255,255,255,0.7); margin:0px 5px 5px 5px; font:22px "Times New Roman", Times, serif;}
+.completo{background:rgba(255,255,255,0.7); margin:0px 5px 5px 5px; text-decoration:underline; font:22px Arial, Helvetica, sans-serif italic;}
+.registro{margin:auto; width:420px; text-align:center; padding:0 20px; border:1px solid #000;}
+.registro p{margin-bottom:40px;}
+.registro input{margin-bottom:10px; width:282px; height:31px;}
+.registro textarea{width:282px; height:150px;}
+.registro .aceptar{padding:10px 20px; background-color:#C2DE0A; box-shadow:5px 5px 0 0px #000; display:inline-block; margin:0 20px; cursor:pointer; float:right;}
+.registro-footer{display:inline-block; width:100%; padding-bottom:20px;}
+.registro-social{float:left;}
+.registro-social img{width:25px; height:25px; float:left; margin-top:10px;}
+.lista{list-style:none; float:left;}
+.lista li{display:inline-block; margin:10px 5px;}
+.footer{display:inline-block; width:100%; background-color:#0033FF;}
+.footer img{float:right; margin:10px; width:25px;}
+.comentario{border:1px solid #000; font:22px "Lucida Console", Monaco, monospace;}
+.comentario-autor{font-size:8px; color:#777;}
+.comentario-autor img{width:25px; height:25px;}
+.comunidad{width:140px; cursor:pointer; display:inline-block;}
+.comunidad img{width:100%;}
+.comunidad p{text-align:center;}
+.comunidades{clear:both; margin-top:20px;}
+.seguir{text-align:center;}
+.usuarios{margin-top:10px;}
+.usuarios div{border:1px solid #000; border-collapse:collapse;}

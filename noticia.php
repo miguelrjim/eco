@@ -7,20 +7,29 @@ if(isset($_POST['accion'],$_SESSION['id']))
 	switch($_POST['accion'])
 	{
 		case 'subir':
-			if(isset($_POST['titulo'],$_POST['texto']))
+			if(isset($_POST['fuentes'],$_POST['abstracto']))
 			{
-				$titulo = $db->real_escape_string($_POST['titulo']);
-				$texto = $db->real_escape_string($_POST['texto']);
-				if($db->real_query("INSERT INTO noticias (titulo,texto,id_comunidad,id_usuario) VALUES ('$titulo','$texto',{$_SESSION['comunidad']},{$_SESSION['id']})"))
+				$fuentes = $db->real_escape_string($_POST['fuentes']);
+				$abstracto = $db->real_escape_string($_POST['abstracto']);
+				$descripcion = isset($_POST['descripcion']) ? "'" . $db->real_escape_string($_POST['descripcion']) . "'" : 'NULL';
+				$titulo = isset($_POST['titulo']) ? "'" . $db->real_escape_string($_POST['titulo'])  . "'" : 'NULL';
+				if($db->multi_query("INSERT INTO noticias (titulo,abstracto,fuentes,descripcion,id_comunidad,id_usuario,fecha) VALUES ($titulo,'$abstracto','$fuentes',$descripcion,{$_SESSION['comunidad']},{$_SESSION['id']},NOW()); SELECT id FROM noticias ORDER BY id DESC LIMIT 1"))
 				{
 					if($db->affected_rows == 1)
 					{
+						$db->next_result();
+						$result = $db->store_result();
+						$fila = $result->fetch_assoc();
+						if(isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0)
+							move_uploaded_file($_FILES['imagen']['tmp_name'], "noticias/{$fila['id']}");
 						$res['success'] = true;
-						$res['titulo'] = $_POST['titulo'];
-						$res['texto'] = $_POST['texto'];
-						header('Location: logged.php');
+						header("Location: noticiac.php?id={$fila['id']}");
 					}
+					else
+						echo $db->errno . ':' . $db->error;
 				}
+				else
+					echo $db->errno . ':' . $db->error;
 			}
 		break;
 	}
