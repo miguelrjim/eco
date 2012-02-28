@@ -80,6 +80,7 @@
      color:white;
 	 border-style:solid;
 	 border-color:black;
+	 overflow: scroll;
     }
 
 
