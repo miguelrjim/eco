@@ -1,5 +1,18 @@
 <html>
 <head> <title>Página Principal</title>
+<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $('#a-login').click(function(e) {
+        $('#login').show();
+		$('#signin').hide();
+    });
+	$('#a-signin').click(function(e) {
+        $('#login').hide();
+		$('#signin').show();
+    });
+});
+</script>
 </head>
 <body>
 <style type="text/css">
@@ -80,7 +93,20 @@
      color:white;
 	 border-style:solid;
 	 border-color:black;
-	 overflow: scroll;
+    }
+	
+	.polig6{
+     width:280px;
+     height:360px;
+	 top:250px;
+	 left:360px;
+	 text-align:center;
+     background:#6495ED;
+     font-family:arial;
+     font-weight:bold;
+     color:white;
+	 border-style:solid;
+	 border-color:black;
     }
 
 
@@ -91,11 +117,11 @@
     </DIV>
 	
 	<DIV STYLE ="position: absolute; left: 650px" class="polig2"> 
-	<p> LOG IN </p>
+	<p> <a href="#" id="a-login">LOG IN</a></p>
     </DIV>
 	
 	<DIV STYLE ="position: absolute; left: 810px" class="polig2"> 
-	<p> SIGN IN </p>
+	<p> <a href="#" id="a-signin">SIGN IN</a> </p>
     </DIV>
 	
 	<DIV STYLE ="position: absolute; left: 325px" class="polig3"> 
@@ -116,6 +142,27 @@
 Proyecto de la clase de ambientes de desarrollo Proyecto de la clase de ambientes de desarrollo Proyecto de la clase de ambientes de desarrollo	</p>
     </DIV>
 	
+    <DIV id="signin" STYLE ="position: absolute;" class="polig6"> 
+	<p> Registrate </p>
+    <form action="registro.php" method="post">
+    Email: <input type="text" name="email"><br />
+    Password: <input type="password" name="password"><br />
+    Nombre: <input type="text" name="nombre"><br />
+    Apellido: <input type="text" name="apellido"><br />
+    Escuela: <input type="text" name="escuela">
+    <input type="submit" value="Sign In" />
+    </form>
+    </DIV>
+    
+    <DIV id="login" STYLE ="position: absolute;display:none" class="polig6"> 
+	<p> Login </p>
+    <form action="login.php" method="post">
+    Email: <input type="text" name="email"><br />
+    Password: <input type="password" name="password"><br />
+    <input type="submit" value="Login" />
+    </form>
+    </DIV>
+    
 	<DIV STYLE ="position: absolute;" class="polig5"> 
 	<p> Noticias Destacadas </p>
     </DIV>

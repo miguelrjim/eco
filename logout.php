@@ -1,6 +1,5 @@
 <?php
 session_start();
-$nombre = $_SESSION["nombre"];
 // Unset all of the session variables.
 $_SESSION = array();
 	

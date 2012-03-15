@@ -61,7 +61,11 @@
 .links
 {
 	max-height:500px;
-	overflow:scroll;
+	overflow:auto;
+}
+
+.autor {
+	background-color:#009900;
 }
 
 ul.navegacion
@@ -92,4 +96,9 @@ ul.navegacion li a.sel
 ul.navegacion li a:hover
 {
 	color:green;
+}
+
+#forma-subir textarea {
+	width:300px;
+	height:300px;
 }
